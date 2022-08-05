@@ -3,7 +3,7 @@
     "servers": [
         {
             "description": "PromWebApi",
-            "url": "https://virtserver.swaggerhub.com/juweinga/promwebapi/1.0.0"
+            "url": "https://pqs-mac-eastus2euap-n6bf.eastus2euap.prometheus.monitor.azure.com/api/v1"
         }
     ],
     "info": {
