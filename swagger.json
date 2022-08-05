@@ -3,7 +3,7 @@
     "servers": [
         {
             "description": "PromWebApi",
-            "url": "https://pqs-mac-eastus2euap-n6bf.eastus2euap.prometheus.monitor.azure.com/api/v1"
+            "url": "https://pqs-mac-eastus2euap-n6bf.eastus2euap.prometheus.monitor.azure.com/"
         }
     ],
     "info": {
@@ -25,7 +25,7 @@
         }
     ],
     "paths": {
-        "/query": {
+        "/api/v1/query": {
             "get": {
                 "tags": [
                     "Prom"
