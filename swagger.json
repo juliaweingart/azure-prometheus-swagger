@@ -1,184 +1,184 @@
 {
-    "openapi": "3.0.0",
-    "servers": [
-        {
-            "description": "PromWebApi",
-            "url": "https://pqs-mac-eastus2euap-n6bf.eastus2euap.prometheus.monitor.azure.com/"
-        }
-    ],
-    "info": {
-        "description": "This is Azure custom implementation of the prometheus API.",
-        "version": "1.0.0",
-        "title": "Prometheus Web API",
-        "contact": {
-            "email": "promwebapinotify@microsoft.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
-    },
-    "tags": [
-        {
-            "name": "Prom",
-            "description": "PQS implementation of Prometheus API"
-        }
-    ],
-    "paths": {
-        "/api/v1/query": {
-            "get": {
-                "tags": [
-                    "Prom"
-                ],
-                "summary": "point in time query to get prometheus metrics",
-                "operationId": "getQuery",
-                "description": "By passing in the appropriate options, you can make a promQL query at a specific point in time\n",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "query",
-                        "description": "Pass a prometheus expression query string",
-                        "required": true,
+   "openapi": "3.0.0",
+   "servers": [
+      {
+         "description": "PromWebApi",
+         "url": "https://pqs-mac-eastus2euap-n6bf.eastus2euap.prometheus.monitor.azure.com"
+      }
+   ],
+   "info": {
+      "description": "This is Azure custom implementation of the prometheus API.",
+      "version": "1.0.0",
+      "title": "Prometheus Web API",
+      "contact": {
+         "email": "promwebapinotify@microsoft.com"
+      },
+      "license": {
+         "name": "Apache 2.0",
+         "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+   },
+   "tags": [
+      {
+         "name": "Prom",
+         "description": "PQS implementation of Prometheus API"
+      }
+   ],
+   "paths": {
+      "/api/v1/query": {
+         "get": {
+            "tags": [
+               "Prom"
+            ],
+            "summary": "point in time query to get prometheus metrics",
+            "operationId": "getQuery",
+            "description": "By passing in the appropriate options, you can make a promQL query at a specific point in time\n",
+            "parameters": [
+               {
+                  "in": "query",
+                  "name": "query",
+                  "description": "Pass a prometheus expression query string",
+                  "required": true,
+                  "schema": {
+                     "type": "string",
+                     "example": "up{cluster=\"mycluster\"}"
+                  }
+               },
+               {
+                  "in": "query",
+                  "name": "time",
+                  "description": "Pass an evaluation timestamp. If not provided, default is current timestamp.",
+                  "required": false,
+                  "schema": {
+                     "type": "string",
+                     "format": "date-time"
+                  }
+               },
+               {
+                  "in": "query",
+                  "name": "timeout",
+                  "description": "Pass an evaluation timeout. Optional. Defaults to and is capped by the value of the -query.timeout flag.",
+                  "required": false,
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "search results matching criteria",
+                  "content": {
+                     "application/json": {
                         "schema": {
-                            "type": "string",
-                            "example": "up{cluster=\"mycluster\"}"
+                           "$ref": "#/components/schemas/QueryResult"
                         }
-                    },
-                    {
-                        "in": "query",
-                        "name": "time",
-                        "description": "Pass an evaluation timestamp. If not provided, default is current timestamp.",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date-time"
-                        }
-                    },
-                    {
-                        "in": "query",
-                        "name": "timeout",
-                        "description": "Pass an evaluation timeout. Optional. Defaults to and is capped by the value of the -query.timeout flag.",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "search results matching criteria",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/QueryResult"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "bad input parameter"
-                    }
-                }
-            },
-            "post": {
-                "tags": [
-                    "Prom"
-                ],
-                "summary": "point in time query to get prometheus metrics",
-                "operationId": "postQuery",
-                "description": "By passing in the appropriate options, you can make a promQL query at a specific point in time.",
-                "responses": {
-                    "200": {
-                        "description": "search results matching criteria",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/QueryResult"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "invalid input"
-                    }
-                },
-                "requestBody": {
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/QueryParams"
-                            }
-                        }
-                    },
-                    "description": "Make request via POST request."
-                }
+                     }
+                  }
+               },
+               "400": {
+                  "description": "bad input parameter"
+               }
             }
-        }
-    },
-    "components": {
-        "schemas": {
-            "QueryParams": {
-                "required": [
-                    "query"
-                ],
-                "properties": {
-                    "query": {
-                        "type": "string",
-                        "example": "up"
-                    },
-                    "time": {
-                        "type": "string",
-                        "format": "date-time",
-                        "example": "2022-07-01T20:10:51.781Z"
-                    },
-                    "timeout": {
-                        "type": "string",
-                        "example": "1m"
-                    }
-                }
-            },
-            "QueryResult": {
-                "type": "object",
-                "required": [
-                    "status",
-                    "data"
-                ],
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "example": "success"
-                    },
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/InstantVector"
+         },
+         "post": {
+            "tags": [
+               "Prom"
+            ],
+            "summary": "point in time query to get prometheus metrics",
+            "operationId": "postQuery",
+            "description": "By passing in the appropriate options, you can make a promQL query at a specific point in time.",
+            "responses": {
+               "200": {
+                  "description": "search results matching criteria",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/QueryResult"
                         }
-                    }
-                }
+                     }
+                  }
+               },
+               "400": {
+                  "description": "invalid input"
+               }
             },
-            "InstantVector": {
-                "type": "object",
-                "required": [
-                    "metric",
-                    "value"
-                ],
-                "properties": {
-                    "metric": {
-                        "type": "object",
-                        "example": {
-                            "__name__": "up",
-                            "job": "prometheus"
-                        }
-                    },
-                    "value": {
-                        "type": "object",
-                        "example": [
-                            1435781451.781,
-                            "1"
-                        ]
-                    }
-                }
+            "requestBody": {
+               "content": {
+                  "application/x-www-form-urlencoded": {
+                     "schema": {
+                        "$ref": "#/components/schemas/QueryParams"
+                     }
+                  }
+               },
+               "description": "Make request via POST request."
             }
-        }
-    }
+         }
+      }
+   },
+   "components": {
+      "schemas": {
+         "QueryParams": {
+            "required": [
+               "query"
+            ],
+            "properties": {
+               "query": {
+                  "type": "string",
+                  "example": "up"
+               },
+               "time": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2022-07-01T20:10:51.781Z"
+               },
+               "timeout": {
+                  "type": "string",
+                  "example": "1m"
+               }
+            }
+         },
+         "QueryResult": {
+            "type": "object",
+            "required": [
+               "status",
+               "data"
+            ],
+            "properties": {
+               "status": {
+                  "type": "string",
+                  "example": "success"
+               },
+               "data": {
+                  "type": "array",
+                  "items": {
+                     "$ref": "#/components/schemas/InstantVector"
+                  }
+               }
+            }
+         },
+         "InstantVector": {
+            "type": "object",
+            "required": [
+               "metric",
+               "value"
+            ],
+            "properties": {
+               "metric": {
+                  "type": "object",
+                  "example": {
+                     "__name__": "up",
+                     "job": "prometheus"
+                  }
+               },
+               "value": {
+                  "type": "object",
+                  "example": [
+                     1435781451.781,
+                     "1"
+                  ]
+               }
+            }
+         }
+      }
+   }
 }
